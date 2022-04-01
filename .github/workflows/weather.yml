@@ -3,7 +3,7 @@ name: 'GitHub Actions Weather Bot'
 on:
   push:
   schedule:
-    - cron: '30 1 * * *'
+    - cron: '30 0 * * *'
 
 jobs:
   bot:
@@ -12,18 +12,14 @@ jobs:
       - name: 'Checkout codes'
         uses: actions/checkout@v1
       - name: 'Get Weather'
-        run: bash ./weather/run.sh
+        run: echo "OUTPUT=`./weather/run.sh`" >> $GITHUB_ENV
       - name: 'Get Date'
         run: echo "REPORT_DATE=$(TZ=':Asia/Shanghai' date '+%Y-%m-%d %T')" >> $GITHUB_ENV
-      - name: 'Send mail'
-        uses: dawidd6/action-send-mail@master
+      - name: 'Send telegram message on push'
+        uses: appleboy/telegram-action@master
         with:
-          server_address: ${{ secrets.MAIL_HOST }}
-          server_port: 25
-          username: ${{ secrets.MAIL_USERNAME }}
-          password: ${{ secrets.MAIL_PASSWORD }}
-          subject: Zibo Weather Report (${{env.REPORT_DATE}})
-          body: file://result.html
-          to: weather@akawa.ink
-          from: GitHub Actions
-          content_type: text/html
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Zibo Weather Report (${{env.REPORT_DATE}})
+            ${{env.OUTPUT}}
