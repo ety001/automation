@@ -13,7 +13,7 @@ jobs:
           posting_key: ${{ secrets.POSTING_KEY }}
           title: This is a test post
           author: 'ety001.test'
-          tags: ['test', 'test1']
+          tags: 'test,test1'
           content: |
             # This is a test post from github action
             ok, fine! [https://github.com/steemfans/post-to-steem-action](https://github.com/steemfans/post-to-steem-action)
