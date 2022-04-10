@@ -1,6 +1,6 @@
 name: 'Post to Steem'
 
-on: [push]
+on: [push, workflow_dispatch]
 
 jobs:
   process_issue:
