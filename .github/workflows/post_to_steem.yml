@@ -18,6 +18,7 @@ jobs:
           owner: 'ety001'
           tz: 'Asia/Shanghai'
       - name: 'Post to Steem'
+        id: post
         uses: 'steemfans/post-to-steem-action@master'
         if: steps.processor.outputs.issue_number != 0
         with:
@@ -29,6 +30,7 @@ jobs:
           reward: ${{ steps.processor.outputs.reward }}
       - name: 'Close Issue'
         uses: 'steemfans/process-issues-for-posting-to-steem-action@master'
+        if: steps.processor.outputs.issue_number != 0
         with:
           issue_number: ${{ steps.processor.outputs.issue_number }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -36,6 +38,7 @@ jobs:
           owner: 'ety001'
       - name: 'Send telegram message'
         uses: appleboy/telegram-action@master
+        if: steps.processor.outputs.issue_number != 0
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
