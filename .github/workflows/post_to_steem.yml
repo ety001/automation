@@ -22,7 +22,7 @@ jobs:
         with:
           posting_key: ${{ secrets.POSTING_KEY }}
           title: ${{ steps.processor.outputs.title }}
-          author: 'ety001.test01'
+          author: 'ety001.test'
           tags: ${{ steps.processor.outputs.tags }}
           content: ${{ steps.processor.outputs.content }}
           reward: ${{ steps.processor.outputs.reward }}
@@ -33,4 +33,11 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           repo: 'automation'
           owner: 'ety001'
+      - name: 'Send telegram message'
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Hi, I have posted issue https://github.com/ety001/automation/issues/${{ steps.processor.outputs.issue_number }} to Steem.
 
