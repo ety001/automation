@@ -1,0 +1,14 @@
+name: 'GitHub Actions Weather Bot'
+
+on: [push]
+
+jobs:
+  process_issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Processor'
+        uses: 'steemfans/process-issues-for-posting-to-steem-action@master'
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repo: 'ety001/automation'
+          owner: 'ety001'
