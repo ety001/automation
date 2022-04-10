@@ -7,8 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Processor'
+        id: 'processor'
         uses: 'steemfans/process-issues-for-posting-to-steem-action@master'
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repo: 'automation'
           owner: 'ety001'
+      - name: 'Print Output'
+        run: echo "${{ steps.processor.outputs }}"
