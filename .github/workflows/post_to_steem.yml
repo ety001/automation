@@ -1,6 +1,9 @@
 name: 'Post to Steem'
 
-on: [push, workflow_dispatch]
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
 
 jobs:
   post_to_steem:
@@ -14,10 +17,20 @@ jobs:
           repo: 'automation'
           owner: 'ety001'
           tz: 'Asia/Shanghai'
-      - name: 'Print Output'
-        run: |
-          echo "${{ steps.processor.outputs.issue_id }}"
-          echo "${{ steps.processor.outputs.title }}"
-          echo "${{ steps.processor.outputs.content }}"
-          echo "${{ steps.processor.outputs.tags }}"
-          echo "${{ steps.processor.outputs.reward }}"
+      - name: 'Post to Steem'
+        uses: 'steemfans/post-to-steem-action@master'
+        with:
+          posting_key: ${{ secrets.POSTING_KEY }}
+          title: ${{ steps.processor.outputs.title }}
+          author: 'ety001.test01'
+          tags: ${{ steps.processor.outputs.tags }}
+          content: ${{ steps.processor.outputs.content }}
+          reward: ${{ steps.processor.outputs.reward }}
+      - name: 'Close Issue'
+        uses: 'steemfans/process-issues-for-posting-to-steem-action@master'
+        with:
+          issue_number: ${{ steps.processor.outputs.issue_number }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repo: 'automation'
+          owner: 'ety001'
+
