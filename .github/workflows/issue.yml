@@ -1,4 +1,4 @@
-name: 'GitHub Actions Weather Bot'
+name: 'Post to Steem'
 
 on: [push]
 
@@ -10,5 +10,5 @@ jobs:
         uses: 'steemfans/process-issues-for-posting-to-steem-action@master'
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          repo: 'ety001/automation'
+          repo: 'automation'
           owner: 'ety001'
