@@ -14,8 +14,7 @@ jobs:
         uses: 'steemfans/process-issues-for-posting-to-steem-action@master'
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          repo: 'automation'
-          owner: 'ety001'
+          repository: ${{ github.repository }}
           tz: 'Asia/Shanghai'
       - name: 'Post to Steem'
         id: post
@@ -34,11 +33,10 @@ jobs:
         with:
           issue_number: ${{ steps.processor.outputs.issue_number }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          repo: 'automation'
-          owner: 'ety001'
+          repository: ${{ github.repository }}
       - name: 'Send telegram message'
         uses: appleboy/telegram-action@master
-        if: steps.processor.outputs.issue_number != 0
+        if: steps.processor.outputs.issue_number != 1
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
