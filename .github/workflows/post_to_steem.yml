@@ -3,7 +3,7 @@ name: 'Post to Steem'
 on: [push, workflow_dispatch]
 
 jobs:
-  process_issue:
+  post_to_steem:
     runs-on: ubuntu-latest
     steps:
       - name: 'Processor'
