@@ -13,6 +13,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           repo: 'automation'
           owner: 'ety001'
+          tz: 'Asia/Shanghai'
       - name: 'Print Output'
         run: |
           echo "${{ steps.processor.outputs.issue_id }}"
@@ -20,4 +21,3 @@ jobs:
           echo "${{ steps.processor.outputs.content }}"
           echo "${{ steps.processor.outputs.tags }}"
           echo "${{ steps.processor.outputs.reward }}"
-
