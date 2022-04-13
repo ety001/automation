@@ -1,0 +1,23 @@
+name: 'Test'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  post_to_steem:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check TEST ENV
+        id: check_test_env
+        env:
+          TEST1: ${{ secrets.TEST1 }}
+          TEST2: ${{ secrets.TEST2 }}
+        run: |
+          echo "is_test_set: ${{ env.TEST1 != '' && env.TEST2 != '' }}"
+          echo "::set-output name=is_test_set::${{ env.TEST1 != '' && env.TEST2 != '' }}"
+      - name: 'Send telegram message'
+        uses: appleboy/telegram-action@master
+        if: |
+          steps.check_telegram.outputs.is_test_set != false
+        run: |
+          echo "${{ steps.check_test_env.is_test_set }}"
