@@ -17,6 +17,6 @@ jobs:
           echo "::set-output name=is_test_set::${{ env.TEST1 != '' && env.TEST2 != '' }}"
       - name: 'Send telegram message'
         if: |
-          steps.check_telegram.outputs.is_test_set != false
+          steps.check_telegram.outputs.is_test_set == false
         run: |
           echo "${{ steps.check_test_env.is_test_set }}"
