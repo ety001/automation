@@ -20,7 +20,6 @@ jobs:
           steps.check_test_env.outputs.is_test_set == false
         run: |
           echo "${{ steps.check_test_env.outputs.is_test_set }}"
-    steps:
       - name: 'publish'
         uses: steemfans/post-to-steem-action@master
         with:
