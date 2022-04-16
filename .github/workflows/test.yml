@@ -20,3 +20,14 @@ jobs:
           steps.check_test_env.outputs.is_test_set == false
         run: |
           echo "${{ steps.check_test_env.outputs.is_test_set }}"
+    steps:
+      - name: 'publish'
+        uses: steemfans/post-to-steem-action@master
+        with:
+          posting_key: ${{ secrets.POSTING_KEY }}
+          title: This is a test post to test steemjs
+          author: ${{ secrets.USERNAME }}
+          tags: 'test,test1'
+          content: |
+            # This is a test post from github action
+            ok, fine! [https://github.com/steemfans/post-to-steem-action](https://github.com/steemfans/post-to-steem-action)
