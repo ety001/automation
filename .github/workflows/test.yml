@@ -1,32 +1,53 @@
-name: 'Test'
+name: 'Post to Steem Schedual'
 
 on:
   workflow_dispatch:
 
 jobs:
-  test_job:
+  post_to_steem:
     runs-on: ubuntu-latest
     steps:
-      - name: Check TEST ENV
-        id: check_test_env
-        env:
-          TEST1: ${{ secrets.TEST1 }}
-          TEST2: ${{ secrets.TEST2 }}
-        run: |
-          echo "is_test_set: ${{ env.TEST1 != '' && env.TEST2 != '' }}"
-          echo "::set-output name=is_test_set::${{ env.TEST1 != '' && env.TEST2 != '' }}"
-      - name: 'Send telegram message'
-        if: |
-          steps.check_test_env.outputs.is_test_set == false
-        run: |
-          echo "${{ steps.check_test_env.outputs.is_test_set }}"
-      - name: 'publish'
-        uses: steemfans/post-to-steem-action@master
+      - name: 'Processor'
+        id: 'processor'
+        uses: 'steemfans/process-issues-for-posting-to-steem-action@master'
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          tz: 'Asia/Shanghai'
+      - name: 'Post to Steem'
+        id: post
+        uses: 'steemfans/post-to-steem-action@master'
+        if: steps.processor.outputs.issue_number != 0
         with:
           posting_key: ${{ secrets.POSTING_KEY }}
-          title: This is a test post to test steemjs
+          title: ${{ steps.processor.outputs.title }}
           author: ${{ secrets.USERNAME }}
-          tags: 'test,test1'
-          content: |
-            # This is a test post from github action
-            ok, fine! [https://github.com/steemfans/post-to-steem-action](https://github.com/steemfans/post-to-steem-action)
+          tags: ${{ steps.processor.outputs.tags }}
+          content: ${{ steps.processor.outputs.content }}
+          reward: ${{ steps.processor.outputs.reward }}
+      - name: 'Close Issue'
+        uses: 'steemfans/process-issues-for-posting-to-steem-action@master'
+        if: steps.processor.outputs.issue_number != 0
+        with:
+          issue_number: ${{ steps.processor.outputs.issue_number }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+      - name: Check whether Active Telegram
+        id: check_telegram
+        env:
+          TELEGRAM_TO: ${{ secrets.TELEGRAM_TO1 }}
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        run: |
+            echo "is_telegram_set: ${{ env.TELEGRAM_TO != '' && env.TELEGRAM_TOKEN != '' }}"
+            echo "::set-output name=is_telegram_set::${{ env.TELEGRAM_TO != '' && env.TELEGRAM_TOKEN != '' }}"
+      - name: 'Send telegram message'
+        uses: appleboy/telegram-action@master
+        if: |
+          steps.processor.outputs.issue_number != 0 &&
+          steps.check_telegram.outputs.is_telegram_set != false
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            Hi, I have posted the issue to Steem.
+            https://github.com/${{ github.repository }}/issues/${{ steps.processor.outputs.issue_number }}
