@@ -35,7 +35,7 @@ jobs:
       - name: Check whether Active Telegram
         id: check_telegram
         env:
-          TELEGRAM_TO: ${{ secrets.TELEGRAM_TO1 }}
+          TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
         run: |
             echo "is_telegram_set: ${{ env.TELEGRAM_TO != '' && env.TELEGRAM_TOKEN != '' }}"
