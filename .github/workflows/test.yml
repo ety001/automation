@@ -16,7 +16,7 @@ jobs:
           tz: 'Asia/Shanghai'
       - name: 'Post to Steem'
         id: post
-        uses: 'steemfans/post-to-steem-action@master'
+        uses: 'steemfans/post-to-steem-action@fix_dry_run'
         if: steps.processor.outputs.issue_number != 0
         with:
           posting_key: ${{ secrets.POSTING_KEY }}
@@ -25,7 +25,7 @@ jobs:
           tags: ${{ steps.processor.outputs.tags }}
           content: ${{ steps.processor.outputs.content }}
           reward: ${{ steps.processor.outputs.reward }}
-          dry_run: true
+          dry_run: 1
       - name: 'Close Issue'
         uses: 'steemfans/process-issues-for-posting-to-steem-action@master'
         if: steps.processor.outputs.issue_number != 0
