@@ -25,6 +25,7 @@ jobs:
           tags: ${{ steps.processor.outputs.tags }}
           content: ${{ steps.processor.outputs.content }}
           reward: ${{ steps.processor.outputs.reward }}
+          dry_run: 1
       - name: 'Close Issue'
         uses: 'steemfans/process-issues-for-posting-to-steem-action@master'
         if: steps.processor.outputs.issue_number != 0
@@ -35,7 +36,7 @@ jobs:
       - name: Check whether Active Telegram
         id: check_telegram
         env:
-          TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
+          TELEGRAM_TO: ${{ secrets.TELEGRAM_TO1 }}
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
         run: |
             echo "is_telegram_set: ${{ env.TELEGRAM_TO != '' && env.TELEGRAM_TOKEN != '' }}"
