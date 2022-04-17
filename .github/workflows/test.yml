@@ -25,6 +25,7 @@ jobs:
           tags: ${{ steps.processor.outputs.tags }}
           content: ${{ steps.processor.outputs.content }}
           reward: ${{ steps.processor.outputs.reward }}
+          dry_run: true
       - name: 'Close Issue'
         uses: 'steemfans/process-issues-for-posting-to-steem-action@master'
         if: steps.processor.outputs.issue_number != 0
