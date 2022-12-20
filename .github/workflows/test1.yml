@@ -20,4 +20,4 @@ jobs:
       - name: Output
         shell: bash
         run: |
-          echo ${{ steps.extract_branch.outputs.branch }}"
+          echo "${{ steps.extract_branch.outputs.branch }}"
